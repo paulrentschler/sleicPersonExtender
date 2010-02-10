@@ -67,7 +67,8 @@ class modifySleicFields(object):
         labels = { 'biography': 'Responsibilities / Research interests',
                    'classifications': 'Choose a categroy that best describes you',
                    'websites': 'Other websites about you',
-                   'officeAddress': 'Office Address (room and building)' }
+                   'officeAddress': 'Office Address (room and building)',
+                   'email': 'E-mail address' }
         
         # define some new descriptions to use
         descriptions = { 'education': 'One degree per line. Example: PhD (1995) Penn State: Subject area or thesis title',
@@ -75,8 +76,9 @@ class modifySleicFields(object):
                          'id': 'Required. Example: abc123 (the part of your default Penn State email address before @psu.edu)',
                          'image': 'You can upload an image up to 200px wide by 250px high',
                          'lastName': 'Required',
-                         'specialities': 'Browse to choose one or more areas where you have expertise or research interests. Note: some areas have sub-areas you can select (e.g. cognitive neuroscience is a sub-area of neuroscience).',
-                         'websites': 'You can specify one or more websites (one per line) that people can go to read more about you, for instance, your departmental web page and/or lab website. Example: http://www.example.com/' }
+                         'specialties': 'Browse to choose one or more areas where you have expertise or research interests. Note: some areas have sub-areas you can select (e.g. cognitive neuroscience is a sub-area of neuroscience).',
+                         'websites': 'You can specify one or more websites (one per line) that people can go to read more about you, for instance, your departmental web page and/or lab website. Example: http://www.example.com/',
+                         'campus': '' }
 
         # define some fields to hide
         hideFields = { 'officeCity': { 'edit': 'invisible', 'view': 'invisible' },
@@ -90,19 +92,19 @@ class modifySleicFields(object):
         
         
         # update the labels
-        for index, value in labels:
+        for index, value in labels.items():
             new_field = schema[index].copy()
             new_field.widget.label = value
             schema[index] = new_field
             
         # update the descriptions
-        for index, value in descriptions:
+        for index, value in descriptions.items():
             new_field = schema[index].copy()
             new_field.widget.description = value
             schema[index] = new_field
             
         # hide the fields
-        for index, value in hideFields:
+        for index, value in hideFields.items():
             new_field = schema[index].copy()
             new_field.widget.visible = value
             schema[index] = new_field
