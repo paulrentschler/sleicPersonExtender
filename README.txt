@@ -1,72 +1,58 @@
-huckPersonExtender: customize the person object for the Huck Institutes
+sleicPersonExtender: customize the person object for SLEIC
 
-Versions
-
-  Developed for Plone 3.3.1 and copied from the MobilePhoneExtender example
-  provided with FacultyStaffDirectory so it should work fine in Plone 2.5 
-  but will extend all Plone sites. Works even better in Plone 3, where it 
-  can be installed or uninstalled on individual Plone sites independently.
 
 Dependencies
 
-  * "FacultyStaffDirectory":http://plone.org/products/faculty-staff-directory/ 2.x
-  
+  * Plone 3.x
+  * FacultyStaffDirectory 2.x (http://plone.org/products/faculty-staff-directory/)
   * archetypes.schemaextender 1.x
+
 
 Description
   
-     Fields added:
-          * fax: fax number
-          * campus: campus they are located at
-          * building: building they are located in
-               used for the DirectorySolutions building directory PCs
-               (choices are: LSB, Wartik, or MSC)
-          * room: room number they are located in
-               used for the DirectorySolutions building directory PCs
+  Developed for Plone 3.3.1 and copied from the dasHorseExtender product.
+  https://weblion.psu.edu/trac/weblion/browser/dairyAnimalScience/dasHorseExtender
 
-     Fields hidden:
+  Fields added:
+    * campus: campus they are located at
 
+  Fields hidden:
+    * OfficeCity
+    * OfficeState
+    * OfficePostalCode
+    * Committees
 
-     Other changes:
+  Other changes:
+    * Updated the labels and descriptions on may fields to make them
+      more user friendly
+    * Moved some fields around to improve the flow
+    * Hide some of the schemata from all users except Managers
+          
 
-Installing the Example Extender
+Installing the Extender
 
   1. Install FacultyStaffDirectory according to that product's README.txt.
   
-  2. Place FSDPersonExtender folder in the Products folder.
+  2. Place sleicPersonExtender folder in the Products folder.
   
   3. Restart Zope.
   
-  4. If you're using Plone 3 or later, go to your-plone-site &rarr; site setup
-     &rarr; Add/Remove Products, and install FacultyStaffDirectoryExtender.
-     In Plone 2.5, it will be installed simply by virtue of being in the
-     Products folder.
+  4. Go to your-plone-site -> site setup -> Add/Remove Products, and 
+     install sleicPersonExtender.
 
-Using the Example Extender
-    
-  1. In your Faculty/Staff Directory object, add a Person.
-  
-  2. Click the Person's Edit tab.
 
 Version History
   
-      2.0 -- Revised version for Plone 3.x
-      
-      1.0 -- Initial release for Plone 2.5
+      1.0 -- Initial release for Plone 3.x
+
 
 Authorship
 
   This product was developed by Paul Rentschler of the Huck Institutes of the 
   Life Sciences at Penn State University.
+
   
-Support
-
-  * Please report bugs to the
-    "WebLion issue tracker": https://weblion.psu.edu/trac/weblion/newticket?component=FacultyStaffDirectory&version=2.0.
-
-  * More documentation: https://weblion.psu.edu/trac/weblion/wiki/FacultyStaffDirectory
-
-  * Contact us:
+Contact
 
     Huck Institutes Web Team
     Penn State University
@@ -74,9 +60,10 @@ Support
     University Park, PA 16802
     webteam@huck.psu.edu
 
+
 License
 
-    Copyright (c) 2006-2008 The Pennsylvania State University. WebLion is
+    Copyright (c) 2006-2010 The Pennsylvania State University. WebLion is
     developed and maintained by the WebLion Project Team, its partners, and
     members of the Penn State Zope Users Group.
 

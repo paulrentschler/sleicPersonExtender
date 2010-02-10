@@ -14,22 +14,12 @@ class _StringExtensionField(ExtensionField, StringField):
 
 # Add fields for a fax number and the campus the person is located at
 # Add fields for use in building the data file for the Building Directory computers
-class addHuckFields(object):
-    """Adapter that adds a building and room number field to Person."""
+class addSleicFields(object):
+    """Adapter that adds a campus field to Person."""
     adapts(IPerson)
     implements(ISchemaExtender)
 
     _fields = [
-            _StringExtensionField('fax',
-                required=False,
-                searchable=True,
-                schemata="Contact Information",
-                widget=StringWidget(
-                    label=u"Fax number",
-                    description=u"Example: 814-865-4321"
-                )
-            ),
-
             _StringExtensionField('campus',
                 required=False,
                 searchable=True,
@@ -43,37 +33,7 @@ class addHuckFields(object):
                 vocabulary=[
                     ("University Park", "University Park"),
                     ("Hershey", "Hershey"),
-                    ("Altoona", "Altoona"),
-                    ("Mont Alto", "Mont Alto"),
-                    ("Worthington Scranton", "Worthington Scranton"),
                 ]
-            ),
-            
-            _StringExtensionField('building',
-                required=False,
-                searchable=False,
-                schemata="Contact Information",
-                widget=SelectionWidget(
-                    label=u"Building",
-                    description=u"Building the person's office is in. Only used for certain buildings that have computerized directories.",
-                    format="radio"
-                ),
-                enforceVocabulary=True,
-                vocabulary=[
-                    ("LSB", "Life Sciences Building"),
-                    ("Wartik", "Wartik Laboratory"),
-                    ("MSC", "Millennium Science Complex")
-                ]
-            ),
-
-            _StringExtensionField('room',
-                required=False,
-                searchable=False,
-                schemata="Contact Information",
-                widget=StringWidget(
-                    label=u"Room number",
-                    description=u"Example: 401B. Only used for certain buildings that have computerized directories."
-                )
             ),
         ]
 
@@ -86,7 +46,7 @@ class addHuckFields(object):
 
 
 # Change the wording and order of a few fields; hide fields that will not be used
-class modifyHuckFields(object):
+class modifySleicFields(object):
     adapts(IPerson)
     implements(ISchemaModifier)
 
@@ -97,31 +57,61 @@ class modifyHuckFields(object):
 
     def fiddle(object, schema):
 
+        # move some fields around
         schema.moveField('education', before='jobTitles')
         schema.moveField('websites', after='classifications')
         schema.moveField('campus', before='officeAddress')
-        schema.moveField('fax', after='officePhone')
-        schema.moveField('building', after='campus')
-        schema.moveField('room', after='building')
 
-        schema['biography'].widget.label = "Responsibilities / Research interests"
-        schema['classifications'].widget.label = "Choose a category that best describes you"
-        schema['education'].widget.description = "One degree per line. Example: PhD (1995) Penn State: Subject area or thesis title"
-        schema['firstName'].widget.description = "Required"
-        schema['id'].widget.description = "Required. Example: abc123 (the part of your default Penn State email address before @psu.edu)"
-        schema['image'].widget.description = "You can upload an image up to 200px wide by 250px high"
-        schema['lastName'].widget.description = "Required"
-        schema['specialties'].widget.description = "Browse to choose one or more areas where you have expertise or research interests. Note: some areas have sub-areas you can select (e.g. cognitive neuroscience is a sub-area of neuroscience)."
-        schema['websites'].widget.label = "Other websites about you"
-        schema['websites'].widget.description = "You can specify one or more websites (one per line) that people can go to read more about you, for instance, your departmental web page and/or lab website. Example: http://www.example.com/"
-        schema['officeAddress'].widget.label = "Office Address (room and building)"
 
-        schema['officeCity'].widget.visible={'edit':'invisible','view':'invisible'}
-        schema['officeState'].widget.visible={'edit':'invisible','view':'invisible'}
-        schema['officePostalCode'].widget.visible={'edit':'invisible','view':'invisible'}
-        schema['departments'].widget.visible={'edit':'invisible','view':'invisible'}
-        schema['committees'].widget.visible={'edit':'invisible','view':'invisible'}
+        # define some new labels to use
+        labels = { 'biography': 'Responsibilities / Research interests',
+                   'classifications': 'Choose a categroy that best describes you',
+                   'websites': 'Other websites about you',
+                   'officeAddress': 'Office Address (room and building)' }
+        
+        # define some new descriptions to use
+        descriptions = { 'education': 'One degree per line. Example: PhD (1995) Penn State: Subject area or thesis title',
+                         'firstName': 'Required',
+                         'id': 'Required. Example: abc123 (the part of your default Penn State email address before @psu.edu)',
+                         'image': 'You can upload an image up to 200px wide by 250px high',
+                         'lastName': 'Required',
+                         'specialities': 'Browse to choose one or more areas where you have expertise or research interests. Note: some areas have sub-areas you can select (e.g. cognitive neuroscience is a sub-area of neuroscience).',
+                         'websites': 'You can specify one or more websites (one per line) that people can go to read more about you, for instance, your departmental web page and/or lab website. Example: http://www.example.com/' }
 
+        # define some fields to hide
+        hideFields = { 'officeCity': { 'edit': 'invisible', 'view': 'invisible' },
+                       'officeState': { 'edit': 'invisible', 'view': 'invisible' },
+                       'officePostalCode': { 'edit': 'invisible', 'view': 'invisible' },
+                       'committees': { 'edit': 'invisible', 'view': 'invisible' } }
+        
+        # define some schemata to hide from all but the Managers
+        hiddenSchemata = ['categorization', 'dates', 'ownership', 'settings']
+        
+        
+        
+        # update the labels
+        for index, value in labels:
+            new_field = schema[index].copy()
+            new_field.widget.label = value
+            schema[index] = new_field
+            
+        # update the descriptions
+        for index, value in descriptions:
+            new_field = schema[index].copy()
+            new_field.widget.description = value
+            schema[index] = new_field
+            
+        # hide the fields
+        for index, value in hideFields:
+            new_field = schema[index].copy()
+            new_field.widget.visible = value
+            schema[index] = new_field
+            
+
+        # hide the schemata
+        for schemata in hiddenSchemata:
+            for fieldName in schema.getSchemataFields(schemata):
+                fieldName.widget.condition="python:member.has_role('Manager')"
+                
 
         return schema
-

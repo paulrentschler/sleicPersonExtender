@@ -1,33 +1,33 @@
-from Products.CMFCore.DirectoryView import registerDirectory
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+#from Products.CMFCore.DirectoryView import registerDirectory
+#from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.FacultyStaffDirectory.extenderInstallation import installExtenderGloballyIfLocallyIsNotSupported
-from Products.GenericSetup import EXTENSION, profile_registry
+#from Products.GenericSetup import EXTENSION, profile_registry
 
-from Products.huckPersonExtender.person import addHuckFields
-from Products.huckPersonExtender.person import modifyHuckFields
+from Products.sleicPersonExtender.person import addSleicFields
+from Products.sleicPersonExtender.person import modifySleicFields
 
-installExtenderGloballyIfLocallyIsNotSupported(addHuckFields, 'huckPersonExtender.bldgDirExtender')
-installExtenderGloballyIfLocallyIsNotSupported(modifyHuckFields, 'huckPersonExtender.modifyHuckFields')
+installExtenderGloballyIfLocallyIsNotSupported(addSleicFields, 'sleicPersonExtender')
+installExtenderGloballyIfLocallyIsNotSupported(modifySleicFields, 'sleicPersonExtender')
 
-registerDirectory('skins', globals())
+#registerDirectory('skins', globals())
 
-def initialize(context):
-    profile_registry.registerProfile(
-        "default",
-        "huckPersonExtender",
-        "Customize the Faculty/Staff Directory's Person type for the Huck Institutes.",
-        "profiles/default",
-        product="Products.huckPersonExtender",
-        profile_type=EXTENSION,
-        for_=IPloneSiteRoot)
-    profile_registry.registerProfile(
-        "uninstall",
-        "huckPersonExtender Uninstall",
-        "Removes the changes to the Faculty/Staff Directory's Person type to customize it for the Huck Institutes.",
-        "profiles/uninstall",
-        product="Products.huckPersonExtender",
-        profile_type=EXTENSION,
-        for_=IPloneSiteRoot)
+#def initialize(context):
+#    profile_registry.registerProfile(
+#        "default",
+#        "sleicPersonExtender",
+#        "Customize the Faculty/Staff Directory's Person type for SLEIC.",
+#        "profiles/default",
+#        product="Products.sleicPersonExtender",
+#        profile_type=EXTENSION,
+#        for_=IPloneSiteRoot)
+#    profile_registry.registerProfile(
+#        "uninstall",
+#        "sleicPersonExtender Uninstall",
+#        "Removes the changes to the Faculty/Staff Directory's Person type to customize it for SLEIC.",
+#        "profiles/uninstall",
+#        product="Products.sleicPersonExtender",
+#        profile_type=EXTENSION,
+#        for_=IPloneSiteRoot)
 
 
 
